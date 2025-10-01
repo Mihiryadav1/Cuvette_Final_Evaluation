@@ -1,0 +1,49 @@
+.modelContainer {
+    min-height: 300px;
+    width: 400px;
+    position: absolute;
+    border: 1px solid white;
+    right: 5%;
+    padding: 1rem;
+    bottom: 5%;
+    border-radius: 10px;
+}
+
+.model-config {
+    display: flex;
+    margin: 0.5rem 0;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.row-container {
+    width: 80%;
+}
+
+.action {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+table {
+    width: 100%;
+
+    & button {
+        background-color: transparent;
+        border: none;
+        color: white;
+    }
+}
+
+thead {
+    background-color: #5284D9;
+    text-align: left;
+}
+
+
+
+td,
+th {
+    padding: 10px;
+}

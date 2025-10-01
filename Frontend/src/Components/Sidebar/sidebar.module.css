@@ -1,0 +1,42 @@
+.nav-item {
+    background-color: var(--navLinks);
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+
+.link {
+    color: var(--white);
+    text-decoration: none;
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+}
+
+.title {
+    margin-bottom: 1rem;
+    padding: 10px;
+}
+
+.menu-Icon {
+    font-size: 1.4rem;
+}
+
+
+/*Responsive Css for sidebar */
+@media (max-width:768px) {
+    .menu-Name {
+        display: none;
+    }
+
+    .title {
+        display: none;
+    }
+
+    .nav-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}

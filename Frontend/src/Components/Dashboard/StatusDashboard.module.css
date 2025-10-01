@@ -1,0 +1,22 @@
+.grid-dashboard {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3%;
+
+}
+
+.card {
+    background: linear-gradient(180deg, #0c0d2a 0%, #151741 100%);
+    display: flex;
+    border-radius: 1rem;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    flex: 1;
+    flex-direction: column;
+    margin-bottom: 3%;
+}
+
+.chart-title {
+    margin-bottom: 1rem;
+}

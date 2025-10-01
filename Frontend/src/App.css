@@ -1,0 +1,24 @@
+:root {
+  --mainbg: #060B26;
+  --secondarybg: #05091e;
+  --sidebar: #03031f;
+  --navLinks: #1A1F37;
+  --white: #fff;
+}
+
+* {
+  padding: 0px 0px;
+  margin: 0px 0px;
+  font-family: Segoe UI;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background-color: var(--mainbg);
+  color: var(--white);
+}
+
+li {
+  list-style: none;
+}
