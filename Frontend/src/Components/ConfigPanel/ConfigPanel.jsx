@@ -139,6 +139,8 @@ const Model = memo(({ apiName, updateConfig, config }) => {
 
 })
 const ConfigPanel = () => {
+  console.log("API BASE:", import.meta.env.VITE_API_BASE);
+
   const [configApis, setConfigsApis] = useState([]);
   const [activeModelApi, setActiveModelApi] = useState(null);
 
