@@ -39,9 +39,9 @@ app.use("/api", apiKeyAuth);
 //--------------------------Routes--------------------------
 
 // get request
-// app.get("/", (req, res) => {
-//   res.json({ message: "API monitoring, Backend is running" });
-// });
+app.get("/", (req, res) => {
+  res.send("Backend is live 🚀");
+});
 
 // Quick Stats Charts - Working
 app.get("/api/analysis", getAnalysisStats);
