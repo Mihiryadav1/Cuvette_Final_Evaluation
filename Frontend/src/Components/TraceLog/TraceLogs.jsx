@@ -5,7 +5,7 @@ const TraceLogs = () => {
   const [traceLog, setTraceLog] = useState([])
   const getTraceLogs = async () => {
     try {
-      await axios(`${import.meta.VITE_API_BASE}/api/tracelog`, {
+      await axios('/api/tracelog', {
         headers: {
           'x-api-key': import.meta.env.VITE_API_KEY
         }

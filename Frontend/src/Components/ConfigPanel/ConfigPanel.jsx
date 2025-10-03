@@ -139,8 +139,6 @@ const Model = memo(({ apiName, updateConfig, config }) => {
 
 })
 const ConfigPanel = () => {
-  console.log("API BASE:", import.meta.env.VITE_API_BASE);
-
   const [configApis, setConfigsApis] = useState([]);
   const [activeModelApi, setActiveModelApi] = useState(null);
 
@@ -150,7 +148,7 @@ const ConfigPanel = () => {
         console.error("Missing required fields: api, key, or value");
         return;
       }
-      await axios(`${import.meta.VITE_API_BASE}/api/configs`, {
+      await axios("/api/configs", {
         method: "PATCH",
         headers: {
           'x-api-key': import.meta.env.VITE_API_KEY,
@@ -180,7 +178,7 @@ const ConfigPanel = () => {
 
 
   const getApiConfig = async () => {
-    await axios.get(`${import.meta.VITE_API_BASE}/api/configs`, {
+    await axios.get("/api/configs", {
       headers: {
         'x-api-key': import.meta.env.VITE_API_KEY
       }

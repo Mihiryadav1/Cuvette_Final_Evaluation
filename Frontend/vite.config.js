@@ -10,8 +10,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        // target: "http://localhost:5000",
-        target: "https://cuvette-final-evaluation-ds47.onrender.com",
+        target: "http://localhost:5000",
         changeOrigin: true,
       },
     },

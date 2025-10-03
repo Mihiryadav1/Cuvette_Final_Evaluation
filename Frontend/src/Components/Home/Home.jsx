@@ -92,7 +92,7 @@ const Home = () => {
 
   // Fetching API details
   const apiStatus = async () => {
-    await axios.get(`${import.meta.VITE_API_BASE}/api/tracelog`, {
+    await axios.get("/api/tracelog", {
       headers: {
         'x-api-key': import.meta.env.VITE_API_KEY
       }
