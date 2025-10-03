@@ -8,12 +8,19 @@ const apiConfigSchema = new mongoose.Schema({
   limitEnabled: { type: Boolean, default: false },
   //Scheduling
   scheduleEnabled: { type: Boolean, default: false },
-  startDate: { type: Date, default: null },
-  startTime: { type: String, default: null },
-  endTime: { type: String, default: null },
+  scheduleWindow: {
+    startTime: { type: String, default: null },
+    endTime: { type: String, default: null },
+  },
+
   //Rate Limiting
-  limit: { type: Number, default: null },
-  rate: { type: Number, default: null },
+  limit: { type: Number, default: 10 },
+  rate: { type: Number, default: 5 },
+  rateUnit: {
+    type: String,
+    enum: ["minute", "second"],
+    default: "minute",
+  },
   setModel: { type: Boolean, default: false },
 });
 

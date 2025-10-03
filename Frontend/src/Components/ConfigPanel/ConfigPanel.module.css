@@ -26,6 +26,30 @@
     align-items: center;
 }
 
+.limit {
+    display: flex;
+}
+
+.title {
+    color: rgb(107, 106, 106);
+}
+
+.saveBtn {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+
+    & button {
+        background-color: #5284D9;
+        border: none;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+}
+
 table {
     width: 100%;
 

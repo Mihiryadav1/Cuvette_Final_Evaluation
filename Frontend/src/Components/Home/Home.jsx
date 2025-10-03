@@ -92,7 +92,11 @@ const Home = () => {
 
   // Fetching API details
   const apiStatus = async () => {
-    await axios.get("/api/tracelog").then(res => {
+    await axios.get("/api/tracelog", {
+      headers: {
+        'x-api-key': import.meta.env.VITE_API_KEY
+      }
+    }).then(res => {
       const updatedMap = {
         apiSocial: [],
         apiLink: [],

@@ -18,7 +18,7 @@ const Sidebar = () => {
                     </Link>
                 </li>
                 <li className={styles["nav-item"]}>
-                    <Link to="/apitracelogs" className={styles['link']}>
+                    <Link to="/tracelogs" className={styles['link']}>
                         <span className={styles["menu-Icon"]}>
                             <FiActivity />
                         </span>
@@ -34,7 +34,7 @@ const Sidebar = () => {
                     </Link>
                 </li>
                 <li className={styles["nav-item"]}>
-                    <Link to="/apilist" className={styles['link']}>
+                    <Link to="/list" className={styles['link']}>
                         <span className={styles["menu-Icon"]}>
                             <AiFillTool />
                         </span>

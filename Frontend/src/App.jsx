@@ -13,9 +13,9 @@ const App = () => {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="home" element={<Home />} />
-            <Route path="apitracelogs" element={<TraceLogs />} />
+            <Route path="tracelogs" element={<TraceLogs />} />
             <Route path="analysis" element={<StatusDashboard />} />
-            <Route path="apilist" element={<ConfigPanel />} />
+            <Route path="list" element={<ConfigPanel />} />
           </Route>
         </Routes>
       </BrowserRouter>

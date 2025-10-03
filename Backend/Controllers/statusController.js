@@ -1,3 +1,4 @@
+// Controller for fetching monthly status logs
 import Tracelog from "../model/tracerlog.js";
 
 export const getPaginatedData = async (req, res) => {

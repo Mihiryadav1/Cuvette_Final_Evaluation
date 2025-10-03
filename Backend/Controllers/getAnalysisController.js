@@ -1,3 +1,4 @@
+//Controller for Charts and Stats
 import TracerLog from "../model/tracerlog.js";
 export const getAnalysisStats = async (req, res) => {
   const { from, to } = req.query;

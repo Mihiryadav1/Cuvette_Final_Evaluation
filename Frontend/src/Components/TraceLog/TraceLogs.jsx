@@ -3,11 +3,16 @@ import React, { useEffect, useState } from 'react'
 import styles from "./TraceLogs.module.css"
 const TraceLogs = () => {
   const [traceLog, setTraceLog] = useState([])
-  const fetchTraceLogs = async () => {
+  const getTraceLogs = async () => {
     try {
-      await fetch('/api/tracelog').then(res => res.json()).then(res => {
-        console.log(res)
-        setTraceLog(res)
+      await axios('/api/tracelog', {
+        headers: {
+          'x-api-key': import.meta.env.VITE_API_KEY
+        }
+      }).then(res => {
+        // console.log(res)
+        const logs = res.data
+        setTraceLog(logs)
       })
     }
     catch (err) {
@@ -15,7 +20,7 @@ const TraceLogs = () => {
     }
   }
   useEffect(() => {
-    fetchTraceLogs()
+    getTraceLogs()
   }, [])
   return (
     <div className={styles['traceLogContainer']}>

@@ -6,6 +6,26 @@ import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 //Update Api Configuration
 
 const Model = memo(({ apiName, updateConfig, config }) => {
+  const [localSchedule, setLocalSchedule] = useState({
+    startTime: config.scheduleWindow?.startTime || "",
+    endTime: config.scheduleWindow?.endTime || ""
+  });
+  const [localLimit, setLocalLimit] = useState(config.limit ?? "");
+  const [localRate, setLocalRate] = useState(config.rate ?? "");
+  const [localUnit, setLocalUnit] = useState(config.rateUnit ?? "minute");
+
+
+  const saveConfig = () => {
+    updateConfig(apiName, "limit", localLimit);
+    updateConfig(apiName, "rate", localRate);
+    updateConfig(apiName, "scheduleWindow", {
+      startTime: localSchedule.startTime,
+      endTime: localSchedule.endTime
+    });
+    updateConfig(apiName, "rateUnit", localUnit);
+    console.log(config, "Config")
+  }
+
   return (
     <div className={styles['modelContainer']}>
       <h2>Controls</h2>
@@ -14,7 +34,7 @@ const Model = memo(({ apiName, updateConfig, config }) => {
         <Switch
           checked={config.enabled ?? false}
           onChange={(e) => {
-            console.log(config, "Config")
+            // console.log(config, "Config")
             updateConfig(apiName, "enabled", e.target.checked);
           }}
         />
@@ -24,19 +44,42 @@ const Model = memo(({ apiName, updateConfig, config }) => {
         <Switch
           checked={config.tracerEnabled ?? false}
           onChange={(e) => {
-            console.log(config, "Config")
+            // console.log(config, "Config")
             updateConfig(apiName, "tracerEnabled", e.target.checked);
           }}
         />
       </div>
       <div className={styles['model-config']}>
-        <p>schedule ON/OFF</p>
+        <p>Schedule On/Off</p>
         <Switch
           checked={config.scheduleEnabled ?? false}
           onChange={(e) => {
-            console.log(config, "Config")
             updateConfig(apiName, "scheduleEnabled", e.target.checked);
           }}
+        />
+      </div>
+      <div className={styles['model-config']} style={{
+        ...(config.scheduleEnabled ? { display: "block" } : { display: "none" }),
+      }}>
+        StartTime:
+        <input
+          type="time"
+          value={localSchedule.startTime}
+          disabled={!config.scheduleEnabled}
+          onChange={(e) =>
+            setLocalSchedule(prev => ({ ...prev, startTime: e.target.value }))
+          }
+        />
+        EndTime:
+        <input
+          type="time"
+          disabled={!config.scheduleEnabled}
+
+
+          value={localSchedule.endTime}
+          onChange={(e) =>
+            setLocalSchedule(prev => ({ ...prev, endTime: e.target.value }))
+          }
         />
       </div>
       <div className={styles['model-config']}>
@@ -44,42 +87,90 @@ const Model = memo(({ apiName, updateConfig, config }) => {
         <Switch
           checked={config.limitEnabled ?? false}
           onChange={(e) => {
-            console.log(config, "Config")
+            // console.log(config, "Config")
             updateConfig(apiName, "limitEnabled", e.target.checked);
           }}
         />
       </div>
-      <div className="flex">
-        Number of request:
-        Rate
-      </div>
+      {
+        config.limitEnabled && <div className={styles["limit"]}>
+          <div className={styles["title"]}>
+            <span>
+              Number of request:
+            </span>
+            <input
+              type="number"
+              value={localLimit}
+              onChange={(e) => setLocalLimit(Number(e.target.value))}
+            />
+          </div>
+          <div className={styles["title"]}>
+            <span>
+              Rate
+            </span>
+            <input
+              type="number"
+              value={localRate}
+              onChange={(e) => setLocalRate(Number(e.target.value))}
+            />
+          </div>
+          <select
+            value={localUnit}
+            onChange={(e) => setLocalUnit(e.target.value)}
+          >
+            <option value="second">Second</option>
+            <option value="minute">Minute</option>
+          </select>
 
-    </div>
+
+        </div>
+      }
+      <div className={styles['saveBtn']}>
+        <button
+          onClick={saveConfig}
+        >
+          Save
+        </button>
+
+      </div>
+    </div >
 
   )
+
 })
 const ConfigPanel = () => {
   const [configApis, setConfigsApis] = useState([]);
   const [activeModelApi, setActiveModelApi] = useState(null);
+
   const updateConfig = async (api, key, value) => {
     try {
-      const res = await fetch("/api/configs", {
+      if (!api || !key || value === undefined) {
+        console.error("Missing required fields: api, key, or value");
+        return;
+      }
+      await axios("/api/configs", {
         method: "PATCH",
-        headers: { "Content-Type": "application/json", "x-api-key": "abcd1234-ef56-7890-gh12-ijkl345678mn" },
-        body: JSON.stringify({
+        headers: {
+          'x-api-key': import.meta.env.VITE_API_KEY,
+          'Content-Type': 'application/json'
+        },
+        data: {
           apiName: api,
           key: key,
           value: value
-        }),
-      });
+        },
+      }).then(res => {
+        // console.log(res, 'Config')
+        setConfigsApis(prev => {
+          return prev.map(item =>
+            item.apiName === api ? { ...item, [key]: value } : item
+          )
+        }
+        );
+      })
 
-      const data = await res.json();
-      console.log(data, "Data");
-      setConfigsApis(prev =>
-        prev.map(item =>
-          item.apiName === api ? { ...item, [key]: value } : item
-        )
-      );
+      // const data = await res.json();
+      // console.log(data, "Data");
     } catch (err) {
       console.error("Update failed:", err);
     }
@@ -87,8 +178,12 @@ const ConfigPanel = () => {
 
 
   const getApiConfig = async () => {
-    await axios.get("/api/configs").then(res => {
-      console.log(res)
+    await axios.get("/api/configs", {
+      headers: {
+        'x-api-key': import.meta.env.VITE_API_KEY
+      }
+    }).then(res => {
+      // console.log(res)
       setConfigsApis(res.data)
     })
   }
@@ -96,7 +191,7 @@ const ConfigPanel = () => {
 
   useEffect(() => {
     getApiConfig()
-    // callFetch()
+    console.log(configApis, "ConfigApis")
   }, [])
 
   return (

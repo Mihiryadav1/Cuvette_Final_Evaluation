@@ -2,7 +2,7 @@ import { LineChart } from "@mui/x-charts";
 import styles from "./StatusDashboard.module.css"
 import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
 import { useState, useEffect } from 'react';
-
+import axios from "axios";
 const StatusDashboard = () => {
     const [stats, setStats] = useState({
         upTimePercent: 0,
@@ -13,12 +13,40 @@ const StatusDashboard = () => {
         message: ""
 
     })
+
     const [formattedData, setFormattedData] = useState([])
 
-    //Fetch Stats 
+    // Helper function for caching
+    const getCachedData = (key, expiryMinutes = 10) => {
+        const cached = localStorage.getItem(key);
+        if (!cached) return null;
+
+        const parsed = JSON.parse(cached);
+        const now = new Date().getTime();
+
+        if (now - parsed.timestamp > expiryMinutes * 60 * 1000) {
+            // expired
+            localStorage.removeItem(key);
+            return null;
+        }
+        return parsed.data;
+    };
+
+    const setCachedData = (key, data) => {
+        localStorage.setItem(key, JSON.stringify({
+            data,
+            timestamp: new Date().getTime(),
+        }));
+    };
+
+    //Fetch Donut Stats 
     const fetchStats = async (from = '2025-01-01', to = new Date().toISOString().split("T")[0]) => {
         try {
-            await fetch(`/api/analysis?from=${from}&to=${to}`).then(res => {
+            await fetch(`/api/analysis?from=${from}&to=${to}`, {
+                headers: {
+                    'x-api-key': import.meta.env.VITE_API_KEY
+                }
+            }).then(res => {
                 return res.json()
             }).then(data => {
                 // console.log(data, "ActualData")
@@ -41,24 +69,26 @@ const StatusDashboard = () => {
     };
 
     //Line Chart Stats
-    const fetchLineStats = async (from = '2025-01-01', to = '2025-09-23') => {
+    const fetchLineStats = async (from = '2025-01-01', to = new Date().toISOString().split("T")[0]) => {
         try {
-            const res = await fetch(`http://localhost:5000/api/uptime?from=${from}&to=${to}`);
-            const json = await res.json();
-            console.log(json, "JSON")
-            const chartData = (json.data || [])
-                .filter(item => item.date && item.uptimePercent != null)
-                .map(item => ({
+            await axios(`/api/uptime?from=${from}&to=${to}`, {
+                headers: {
+                    'x-api-key': import.meta.env.VITE_API_KEY
+                }
+            }).then(res => {
+                // console.log(res.data, "JSON")
+                const chartData = res.data.map(item => ({
                     x: new Date(item.date),
                     y: item.uptimePercent,
                 }));
+                // console.log(chartData, "ChartData")
+                setFormattedData(chartData);
+            })
 
-            setFormattedData(chartData);
         } catch (error) {
             console.error("Error fetching stats:", error);
         }
     };
-
 
     //Chart Custom Themes
     const theme = (arcColor) => ({
@@ -81,9 +111,11 @@ const StatusDashboard = () => {
         fetchStats()
         fetchLineStats()
     }, [])
-    useEffect(() => {
-        console.log(stats, "Stats")
-    }, [stats])
+
+    // useEffect(() => {
+    //     console.log(stats, "Stats")
+    // }, [stats])
+
     useEffect(() => {
         console.log(formattedData)
     }, [formattedData])
@@ -145,15 +177,31 @@ const StatusDashboard = () => {
                     sx={() => theme("#720000")} />
             </div>
             <div className={styles['card']}>
+
                 <LineChart
                     width={1100}
                     height={300}
                     dataset={formattedData}
-                    series={[{ dataKey: "y", label: "Uptime %" }]}
-                    xAxis={[
-                        { dataKey: "x", scaleType: "time", valueFormatter: d => d.toLocaleDateString() }
-                    ]}
-                    yAxis={[{ min: 95, max: 100, label: "Uptime (%)" }]}
+                    series={[{
+                        dataKey: "y",
+                        label: "Uptime %",
+                        color: "#fff",
+                        lineType: "monotone",
+                        thickness: 3,
+                        valueFormatter: (value) => `${value.toFixed(2)}%`,
+                    }]}
+                    xAxis={[{
+                        dataKey: "x",
+                        scaleType: "time",
+                        valueFormatter: d => d.toLocaleDateString(),
+                        label: "Date"
+                    }]}
+                    yAxis={[{
+                        min: 60,
+                        max: 100,
+                        label: "Uptime (%)"
+                    }]}
+                    margin={{ top: 20, bottom: 40, left: 60, right: 20 }}
                 />
 
 
