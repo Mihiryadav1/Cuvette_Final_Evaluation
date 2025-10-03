@@ -71,7 +71,7 @@ const StatusDashboard = () => {
     //Line Chart Stats
     const fetchLineStats = async (from = '2025-01-01', to = new Date().toISOString().split("T")[0]) => {
         try {
-            await axios(`/api/uptime?from=${from}&to=${to}`, {
+            await axios(`${import.meta.VITE_API_BASE}/api/uptime?from=${from}&to=${to}`, {
                 headers: {
                     'x-api-key': import.meta.env.VITE_API_KEY
                 }
