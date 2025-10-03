@@ -148,7 +148,7 @@ const ConfigPanel = () => {
         console.error("Missing required fields: api, key, or value");
         return;
       }
-      await axios("/api/configs", {
+      await axios(`${import.meta.env.VITE_BACKEND_URL}/api/configs`, {
         method: "PATCH",
         headers: {
           'x-api-key': import.meta.env.VITE_API_KEY,
@@ -178,7 +178,7 @@ const ConfigPanel = () => {
 
 
   const getApiConfig = async () => {
-    await axios.get("/api/configs", {
+    await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/configs`, {
       headers: {
         'x-api-key': import.meta.env.VITE_API_KEY
       }

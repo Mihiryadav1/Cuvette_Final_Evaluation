@@ -42,7 +42,7 @@ const StatusDashboard = () => {
     //Fetch Donut Stats 
     const fetchStats = async (from = '2025-01-01', to = new Date().toISOString().split("T")[0]) => {
         try {
-            await fetch(`/api/analysis?from=${from}&to=${to}`, {
+            await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/analysis?from=${from}&to=${to}`, {
                 headers: {
                     'x-api-key': import.meta.env.VITE_API_KEY
                 }
