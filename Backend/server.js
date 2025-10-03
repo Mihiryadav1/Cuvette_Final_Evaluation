@@ -30,7 +30,12 @@ const __dirname = path.dirname(__filename);
 mongoConnect();
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://cuvette-final-evaluation-frontend.onrender.com",
+    allowedHeaders: ["Content-Type", "x-api-key"],
+  })
+);
 app.use(express.static(path.join(__dirname, "..", "Frontend", "dist")));
 app.use(express.json());
 app.use(traceMiddleware);
@@ -40,7 +45,7 @@ app.use("/api", apiKeyAuth);
 
 // get request
 app.get("/", (req, res) => {
-  res.send("Backend is live 🚀");
+  res.json({ message: "API monitoring, Backend is running" });
 });
 
 // Quick Stats Charts - Working
